@@ -146,3 +146,32 @@ describe('second scenario: wrong requests handling', () => {
         server.close()
     })
 })
+
+
+describe('fourth scenario: test presons quantity', () => {
+    const personsQuantity = 10;
+
+    test('first GET request - return all persons (empty array for the moment) ', async () => {
+        const response = await supertest(server).get('/person');
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual([]);
+    })
+
+    test('POST request - create a person 10 times, GET request - return 10 persons', async () => {
+        for (let i = 0; i < personsQuantity; i += 1) {
+            await supertest(server)
+                .post('/person')
+                .send(newPerson)
+                .set('Accept', 'application/json')
+        }
+
+        const response = await supertest(server).get('/person');
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body.length).toBe(personsQuantity);
+    })
+
+    afterAll(() => {
+        server.close()
+    })
+})
