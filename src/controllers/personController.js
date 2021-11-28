@@ -47,7 +47,11 @@ const createPerson =  async (req, res) => {
             return res.end(JSON.stringify({ message: 'Please, specify required fields: name, age, hobbies' }));
         }
 
-        validatePersonProperties({ name, age, hobbies }, res);
+        const isValid = validatePersonProperties({ name, age, hobbies }, res);
+
+        if (!isValid) {
+            return;
+        }
 
         const person = {
             name,
@@ -80,7 +84,11 @@ const updatePerson = async (req, res, id) => {
 
             const { name, age, hobbies } = body;
 
-            validatePersonProperties({ name, age, hobbies }, res);
+            const isValid = validatePersonProperties({ name, age, hobbies }, res);
+
+            if (!isValid) {
+                return;
+            }
 
             const personData = {
                 name: name || person.name,
@@ -88,11 +96,10 @@ const updatePerson = async (req, res, id) => {
                 hobbies: hobbies || person.hobbies,
             }
 
-        const updatedPerson = await Person.update(id, personData);
+            const updatedPerson = await Person.update(id, personData);
 
-        res.writeHead(200, { 'Content-type': 'application/json' });
-
-        return res.end(JSON.stringify(updatedPerson));
+            res.writeHead(200, { 'Content-type': 'application/json' });
+            return res.end(JSON.stringify(updatedPerson));
 
         }
     } catch (error) {
