@@ -31,7 +31,7 @@ describe('second scenario: general errors handling', () => {
         expect(response.body).toEqual([]);
     })
 
-    afterAll(() => {
+    afterEach(() => {
         server.close()
     })
 })

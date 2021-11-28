@@ -80,8 +80,7 @@ describe('first scenario: standart flow', () => {
         expect(response.body.message).toBe('Person not found');
     })
 
-
-    afterAll(() => {
+    afterEach(() => {
         server.close()
     })
 })
@@ -142,7 +141,7 @@ describe('second scenario: wrong requests handling', () => {
         expect(response.body.message).toEqual('Person not found');
     })
 
-    afterAll(() => {
+    afterEach(() => {
         server.close()
     })
 })
@@ -157,7 +156,7 @@ describe('fourth scenario: test presons quantity', () => {
         expect(response.body).toEqual([]);
     })
 
-    test('POST request - create a person 10 times, GET request - return 10 persons', async () => {
+    test('POST request - create a person 10 times, GET request - return 10', async () => {
         for (let i = 0; i < personsQuantity; i += 1) {
             await supertest(server)
                 .post('/person')
@@ -171,7 +170,7 @@ describe('fourth scenario: test presons quantity', () => {
         expect(response.body.length).toBe(personsQuantity);
     })
 
-    afterAll(() => {
+    afterEach(() => {
         server.close()
     })
 })
