@@ -1,8 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 
-let persons = [{
-    id: '75442486-0878-440c-9db1-a7006c25a39f',
-}, 2, 3];
+let persons = [];
 
 const findAll = () => {
     return new Promise((resolve, reject) => {
@@ -40,4 +38,5 @@ module.exports = {
     create,
     update,
     remove,
+    persons,
 }

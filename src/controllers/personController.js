@@ -22,7 +22,7 @@ const getPerson = async (req, res, id) => {
 
         if (!person) {
             res.writeHead(404, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ message: 'Person not found '}))
+            res.end(JSON.stringify({ message: 'Person not found'}))
         } else {
             res.writeHead(200, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify(person))
@@ -69,7 +69,7 @@ const updatePerson = async (req, res, id) => {
 
         if (!person) {
             res.writeHead(404, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ message: 'Person not found '}))
+            res.end(JSON.stringify({ message: 'Person not found'}))
         } else {
             const body = await getPostData(req);
 
@@ -101,7 +101,7 @@ const deletePerson =  async (req, res, id) => {
 
         if (!person) {
             res.writeHead(404, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ message: 'Person not found '}))
+            res.end(JSON.stringify({ message: 'Person not found'}))
         } else {
             await Person.remove(id);
             res.writeHead(204, { 'Content-Type': 'application/json' })
