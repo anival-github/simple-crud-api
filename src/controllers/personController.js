@@ -38,7 +38,7 @@ const getPerson = async (req, res, id) => {
 // @route POST /person
 const createPerson =  async (req, res) => {
     try {
-        const body = await getPostData(req);
+        const body = await getPostData(req, res);
 
         const { name, age, hobbies } = body;
 
@@ -74,7 +74,7 @@ const updatePerson = async (req, res, id) => {
             res.writeHead(404, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify({ message: 'Person not found'}))
         } else {
-            const body = await getPostData(req);
+            const body = await getPostData(req, res);
 
             const { name, age, hobbies } = body;
 

@@ -1,4 +1,4 @@
-const getPostData = (req) => {
+const getPostData = (req, res) => {
     return new Promise((resolve, reject) => {
         try {
             let body = '';
@@ -8,10 +8,16 @@ const getPostData = (req) => {
             })
 
             req.on('end', () => {
-                resolve(JSON.parse(body));
+                try {
+                    resolve(JSON.parse(body));
+                } catch (error) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' })
+                    res.end(JSON.stringify({ message: error.message }))
+                }
             })
         } catch (error) {
-            reject(error)
+            res.writeHead(500, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ message: error.message }))
         }
     });
 }
