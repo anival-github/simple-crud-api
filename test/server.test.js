@@ -1,4 +1,4 @@
-const { validate } = require('uuid');
+const { validate, v4: uuidv4} = require('uuid');
 const supertest = require('supertest');
 const server = require('../src/server');
 const { persons } = require('../src/models/personModel');
@@ -84,5 +84,62 @@ describe('first scenario: standart flow', () => {
 
     afterAll(() => {
         server.close()
+    })
+})
+
+describe('second scenario: wrong requests handling', () => {
+    test('not existing path) ', async () => {
+        const response = await supertest(server).get('/person/there-is-no-such-a-path');
+        expect(response.statusCode).toBe(404);
+        expect(response.body.message).toEqual('Route not found');
+    })
+
+    test('GET request - invalid id in request params) ', async () => {
+        const response = await supertest(server).get('/person/1234');
+        expect(response.statusCode).toBe(400);
+        expect(response.body.message).toEqual('PersonId is not valid');
+    })
+
+    test('GET request - person is not found) ', async () => {
+        const id = uuidv4()
+        const response = await supertest(server).get(`/person/${id}`);
+        expect(response.statusCode).toBe(404);
+        expect(response.body.message).toEqual('Person not found');
+    })
+
+    test('POST request - adding person with no mandatory field) ', async () => {
+        const response = await supertest(server)
+            .post('/person')
+            .send({ name: 'Alex' })
+            .set('Accept', 'application/json')
+
+        expect(response.statusCode).toBe(400);
+        expect(response.body.message).toEqual('Please, specify required fields: name, age, hobbies');
+    })
+
+    test('PUT request - invalid id in request params) ', async () => {
+        const response = await supertest(server).put('/person/1234');
+        expect(response.statusCode).toBe(400);
+        expect(response.body.message).toEqual('PersonId is not valid');
+    })
+
+    test('PUT request - person is not found) ', async () => {
+        const id = uuidv4()
+        const response = await supertest(server).put(`/person/${id}`);
+        expect(response.statusCode).toBe(404);
+        expect(response.body.message).toEqual('Person not found');
+    })
+
+    test('DELETE request - invalid id in request params) ', async () => {
+        const response = await supertest(server).delete('/person/1234');
+        expect(response.statusCode).toBe(400);
+        expect(response.body.message).toEqual('PersonId is not valid');
+    })
+
+    test('DELETE request - person is not found) ', async () => {
+        const id = uuidv4()
+        const response = await supertest(server).delete(`/person/${id}`);
+        expect(response.statusCode).toBe(404);
+        expect(response.body.message).toEqual('Person not found');
     })
 })
