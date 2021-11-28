@@ -22,6 +22,24 @@ const getPostData = (req, res) => {
     });
 }
 
+const validatePersonProperties = ({ name, age, hobbies }, res) => {
+    if (name && typeof name !== 'string') {
+        res.writeHead(400, { 'Content-type': 'application/json' });
+        return res.end(JSON.stringify({ message: 'Name must be of type "string"' }));
+    }
+
+    if (age && typeof age !== 'number') {
+        res.writeHead(400, { 'Content-type': 'application/json' });
+        return res.end(JSON.stringify({ message: 'Age must be of type "number"' }));
+    }
+
+    if (hobbies && !hobbies.every((element) => typeof element === 'string')) {
+        res.writeHead(400, { 'Content-type': 'application/json' });
+        return res.end(JSON.stringify({ message: 'Each hobby must be of type "string"' }));
+    }
+}
+
 module.exports = {
     getPostData,
+    validatePersonProperties,
 }

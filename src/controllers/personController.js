@@ -1,5 +1,5 @@
 const Person = require('../models/personModel');
-const { getPostData } = require('../Utils');
+const { getPostData, validatePersonProperties } = require('../Utils');
 
 // @desc Get all Persons
 // @route GET /person
@@ -47,6 +47,8 @@ const createPerson =  async (req, res) => {
             return res.end(JSON.stringify({ message: 'Please, specify required fields: name, age, hobbies' }));
         }
 
+        validatePersonProperties({ name, age, hobbies }, res);
+
         const person = {
             name,
             age,
@@ -77,6 +79,8 @@ const updatePerson = async (req, res, id) => {
             const body = await getPostData(req, res);
 
             const { name, age, hobbies } = body;
+
+            validatePersonProperties({ name, age, hobbies }, res);
 
             const personData = {
                 name: name || person.name,
