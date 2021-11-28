@@ -1,7 +1,6 @@
 const { validate, v4: uuidv4} = require('uuid');
 const supertest = require('supertest');
 const server = require('../src/server');
-const { persons } = require('../src/models/personModel');
 
 const newPerson = {
     "name": "Alex",
@@ -141,5 +140,9 @@ describe('second scenario: wrong requests handling', () => {
         const response = await supertest(server).delete(`/person/${id}`);
         expect(response.statusCode).toBe(404);
         expect(response.body.message).toEqual('Person not found');
+    })
+
+    afterAll(() => {
+        server.close()
     })
 })
